@@ -90,7 +90,7 @@ dependencies {
 }
 
 task checkstyle(type: Checkstyle) {
-    configFile file('../config/checkstyle/checkstyle.xml')
+    configFile file('../checkstyle/checkstyle.xml')
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
