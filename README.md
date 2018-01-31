@@ -14,7 +14,7 @@ Finally, this information would be passed through the UI thread.
 - Shows Flickr feed and meta data at detail view
 
 ### SDK support
-Support SDKs from **19** to **25**
+Support SDKs from **19** to **27**
 
 # Disclosure - Libraries used
 - [Dagger 2](http://google.github.io/dagger) for Dependency Injection
