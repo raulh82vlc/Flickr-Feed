@@ -16,12 +16,12 @@
 
 package com.raulh82vlc.flickrj.data.network.datasource;
 
-import com.google.gson.Gson;
 import com.raulh82vlc.flickrj.data.network.FeedApi;
 import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandler;
 import com.raulh82vlc.flickrj.data.network.exceptions.NoNetConnectionException;
 import com.raulh82vlc.flickrj.data.network.model.FeedApiModel;
 import com.raulh82vlc.flickrj.data.network.model.FeedItemApiModel;
+import com.raulh82vlc.flickrj.data.network.response.ResponseHandler;
 
 import java.util.List;
 
@@ -41,39 +41,36 @@ public class NetworkDataSourceImpl implements NetworkDataSource<FeedItemApiModel
 
     private final FeedApi feedApi;
     private final ConnectionHandler connectionHandler;
-    private final Gson gson;
+    private final ResponseHandler responseHandler;
 
     @Inject
-    public NetworkDataSourceImpl(FeedApi feedApi, ConnectionHandler connectionHandler, Gson gson) {
+    public NetworkDataSourceImpl(FeedApi feedApi, ConnectionHandler connectionHandler,
+                                 ResponseHandler responseHandler) {
         this.feedApi = feedApi;
         this.connectionHandler = connectionHandler;
-        this.gson = gson;
+        this.responseHandler = responseHandler;
         //TODO "json" parameter at request into gradle variable
     }
 
     //TODO datasource passes this list of API model and Repo transforms it into a cache model
     //TODO repo does a zip of both cache & API fresh results and returns it back
     //TODO inject subscriber to be able to mock it
-    //TODO wrap Gson to use a lighter mock for test
     @Override
     public Single<List<FeedItemApiModel>> getFeed() {
         return feedApi.getFeed("json")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .compose(o -> connectionHandler.isThereConnection() ? o : Single.error(new NoNetConnectionException("No Internet")))
+                .compose(body -> connectionHandler.isThereConnection()
+                        ? body
+                        : Single.error(new NoNetConnectionException("No Internet")))
                 .filter(responseBodyResult ->
                         !responseBodyResult.isError() && responseBodyResult.response() != null)
                 .map(responseBodyResult -> responseBodyResult.response().body().string())
-                .filter(responseBodyResult -> responseBodyResult.contains("jsonFlickrFeed("))
-                .map(this::stringTokenizer)
-                .map(responseJson -> gson.fromJson(responseJson, FeedApiModel.class))
+                .filter(responseHandler::hasFeedFormat)
+                .map(responseHandler::extractJSONFromResponse)
+                .map(responseHandler::deserializeFeedJSON)
+                .filter(apiModelSingle -> responseHandler.hasNoApiFailure(apiModelSingle.getStatusOfCall()))
                 .map(FeedApiModel::getFeedItems)
                 .flatMapSingle(Single::just);
-    }
-
-    //TODO create a delegate to create a parser
-    private String stringTokenizer(String response) {
-        response = response.replaceFirst("jsonFlickrFeed\\(", "");
-        return response.substring(0, response.length() - 1);
     }
 }

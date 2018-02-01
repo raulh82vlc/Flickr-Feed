@@ -23,6 +23,7 @@ import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandler;
 import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandlerImpl;
 import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
 import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSourceImpl;
+import com.raulh82vlc.flickrj.data.network.response.ResponseHandler;
 
 import java.util.concurrent.TimeUnit;
 
@@ -49,10 +50,13 @@ import timber.log.Timber;
 @Module
 public class NetworkModule {
 
+    private static final String LOGGING_INTERCEPTOR = "logging_interceptor";
+
     @Provides
     @Singleton
-    NetworkDataSource provideNetDataSource(FeedApi api, ConnectionHandler connectionHandler, Gson gson) {
-        return new NetworkDataSourceImpl(api, connectionHandler, gson);
+    NetworkDataSource provideNetDataSource(FeedApi api, ConnectionHandler connectionHandler,
+                                           ResponseHandler responseHandler) {
+        return new NetworkDataSourceImpl(api, connectionHandler, responseHandler);
     }
 
     @Provides
@@ -61,19 +65,23 @@ public class NetworkModule {
     }
 
     @Provides
-    public FeedApi provideFeedApi(Retrofit retrofit) {
+    ResponseHandler provideResponseHandler(Gson gson) {
+        return new ResponseHandler(gson);
+    }
+
+    @Provides
+    FeedApi provideFeedApi(Retrofit retrofit) {
         return retrofit.create(FeedApi.class);
     }
 
     @Provides
-    @Singleton
-    public Gson provideGson() {
+    Gson provideGson() {
         return new Gson();
     }
 
     @Provides
     @Singleton
-    public OkHttpClient providesOkHttpClient(@Named("logging_interceptor") Interceptor interceptor) {
+    OkHttpClient providesOkHttpClient(@Named(LOGGING_INTERCEPTOR) Interceptor interceptor) {
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(3, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
@@ -84,14 +92,14 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public RxJava2CallAdapterFactory providesRxJava2CallAdapter() {
+    RxJava2CallAdapterFactory providesRxJava2CallAdapter() {
         return RxJava2CallAdapterFactory.create();
     }
 
     @Provides
     @Singleton
-    public Retrofit providesRetrofit(OkHttpClient okHttpClient,
-                                     RxJava2CallAdapterFactory adapterFactory) {
+    Retrofit providesRetrofit(OkHttpClient okHttpClient,
+                              RxJava2CallAdapterFactory adapterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL_API)
                 .client(okHttpClient)
@@ -101,16 +109,19 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    @Named("logging_interceptor")
-    public Interceptor providesLogsInterceptor() {
+    @Named(LOGGING_INTERCEPTOR)
+    Interceptor providesLogsInterceptor() {
         return chain -> {
             Response response = chain.proceed(chain.request());
             if (BuildConfig.DEBUG) {
                 String bodyString = response.body().string();
                 Request originalRequest = chain.request();
-                Timber.d("Request %s with headers %s ", originalRequest.url(), originalRequest.headers());
-                Timber.d("HTTP response code %s %s \n\n with body %s \n\n with headers %s ", response.code(), response.message(), bodyString, response.headers());
-                response = response.newBuilder().body(ResponseBody.create(response.body().contentType(), bodyString)).build();
+                Timber.d("Request %s with headers %s ", originalRequest.url(),
+                        originalRequest.headers());
+                Timber.d("HTTP response code %s %s \n\n with body %s \n\n with headers %s ",
+                        response.code(), response.message(), bodyString, response.headers());
+                response = response.newBuilder().body(ResponseBody.create(response.body().contentType(),
+                        bodyString)).build();
             }
             return response;
         };

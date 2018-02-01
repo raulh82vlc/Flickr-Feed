@@ -26,6 +26,8 @@ import java.util.List;
  */
 
 public class FeedApiModel {
+    @SerializedName("stat")
+    private String statusOfCall;
     @SerializedName("title")
     private String title;
     @SerializedName("link")
@@ -61,5 +63,9 @@ public class FeedApiModel {
 
     public List<FeedItemApiModel> getFeedItems() {
         return feedItems;
+    }
+
+    public String getStatusOfCall() {
+        return statusOfCall == null || statusOfCall.isEmpty() ? "ok" : statusOfCall;
     }
 }
