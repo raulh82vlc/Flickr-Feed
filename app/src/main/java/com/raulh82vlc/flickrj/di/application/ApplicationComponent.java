@@ -20,6 +20,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.raulh82vlc.flickrj.FlickrApp;
+import com.raulh82vlc.flickrj.data.di.NetworkModule;
+import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
 
 import javax.inject.Singleton;
 
@@ -37,7 +39,8 @@ import dagger.Component;
 @Singleton
 @Component(
         modules = {
-                ApplicationModule.class
+                ApplicationModule.class,
+                NetworkModule.class
         })
 public interface ApplicationComponent {
 
@@ -52,4 +55,6 @@ public interface ApplicationComponent {
      * Used in child components
      */
     Application application();
+
+    NetworkDataSource getNetWorkDataSource();
 }

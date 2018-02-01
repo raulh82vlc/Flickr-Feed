@@ -22,15 +22,63 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.raulh82vlc.flickrj.FlickrApp;
 import com.raulh82vlc.flickrj.R;
+import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
+import com.raulh82vlc.flickrj.data.network.model.FeedItemApiModel;
+import com.raulh82vlc.flickrj.di.activity.ActivityModule;
+import com.raulh82vlc.flickrj.feed.di.FeedComponent;
+import com.raulh82vlc.flickrj.feed.di.DaggerFeedComponent;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class FeedActivity extends AppCompatActivity {
+
+    private FeedComponent feedComponent;
+
+    @Inject
+    NetworkDataSource dataSource;
+
+    private void showError(Throwable e) {
+        Timber.e(e.getMessage());
+    }
+
+    private void whatever(List<FeedItemApiModel> modelList) {
+        Timber.d("int " + modelList.size());
+    }
+
+    public void startRequest() {
+        dataSource.getFeed()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer() {
+                               @Override
+                               public void accept(Object data) throws Exception {
+                                   FeedActivity.this.whatever((List<FeedItemApiModel>) data);
+                               }
+                           },
+                        new Consumer() {
+                            @Override
+                            public void accept(Object e) throws Exception {
+                                FeedActivity.this.showError((Exception) e);
+                            }
+                        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
         setSupportActionBar(findViewById(R.id.toolbar));
+        getComponentInstance().inject(this);
+        startRequest();
     }
 
     @Override
@@ -49,5 +97,14 @@ public class FeedActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public FeedComponent getComponentInstance() {
+        if (feedComponent == null) {
+            feedComponent = DaggerFeedComponent.builder()
+                    .applicationComponent(((FlickrApp) getApplication()).getComponentInstance())
+                    .build();
+        }
+        return feedComponent;
     }
 }

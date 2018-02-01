@@ -44,7 +44,7 @@ allprojects {
         libPicasso = '2.5.2'
         libGson = '2.8.2'
         libRxJava = '2.1.0'
-        libRxAndroid = '2.1.0'
+        libRxAndroid = '2.0.1'
         libInject = '1'
         testingMockito = '1.10.19'
         testingJUnit = '4.12'
