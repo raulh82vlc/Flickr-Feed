@@ -24,6 +24,7 @@ import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandlerImpl;
 import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
 import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSourceImpl;
 import com.raulh82vlc.flickrj.data.network.response.ResponseHandler;
+import com.raulh82vlc.flickrj.threading.TaskThreading;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,8 +43,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import timber.log.Timber;
 
 /**
- * Module which provides activity scope context
- * and satisfies both activity & fragment dependencies
+ * Module which provides network artifacts necessary to make requests & handle responses
  *
  * @author Raul Hernandez Lopez
  */
@@ -55,8 +55,9 @@ public class NetworkModule {
     @Provides
     @Singleton
     NetworkDataSource provideNetDataSource(FeedApi api, ConnectionHandler connectionHandler,
-                                           ResponseHandler responseHandler) {
-        return new NetworkDataSourceImpl(api, connectionHandler, responseHandler);
+                                           ResponseHandler responseHandler, TaskThreading taskThreading) {
+        return new NetworkDataSourceImpl(api, connectionHandler, responseHandler, taskThreading,
+                BuildConfig.JSON_FORMAT);
     }
 
     @Provides

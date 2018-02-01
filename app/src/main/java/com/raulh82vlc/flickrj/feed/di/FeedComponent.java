@@ -16,8 +16,6 @@
 
 package com.raulh82vlc.flickrj.feed.di;
 
-import android.app.Activity;
-
 import com.raulh82vlc.flickrj.di.activity.ActivityModule;
 import com.raulh82vlc.flickrj.di.activity.scopes.ActivityScope;
 import com.raulh82vlc.flickrj.di.application.ApplicationComponent;

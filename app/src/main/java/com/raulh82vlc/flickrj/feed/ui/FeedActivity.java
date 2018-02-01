@@ -26,17 +26,14 @@ import com.raulh82vlc.flickrj.FlickrApp;
 import com.raulh82vlc.flickrj.R;
 import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
 import com.raulh82vlc.flickrj.data.network.model.FeedItemApiModel;
-import com.raulh82vlc.flickrj.di.activity.ActivityModule;
-import com.raulh82vlc.flickrj.feed.di.FeedComponent;
 import com.raulh82vlc.flickrj.feed.di.DaggerFeedComponent;
+import com.raulh82vlc.flickrj.feed.di.FeedComponent;
+import com.raulh82vlc.flickrj.threading.TaskThreading;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class FeedActivity extends AppCompatActivity {
@@ -45,6 +42,8 @@ public class FeedActivity extends AppCompatActivity {
 
     @Inject
     NetworkDataSource dataSource;
+    @Inject
+    TaskThreading taskThreading;
 
     private void showError(Throwable e) {
         Timber.e(e.getMessage());
@@ -56,20 +55,10 @@ public class FeedActivity extends AppCompatActivity {
 
     public void startRequest() {
         dataSource.getFeed()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer() {
-                               @Override
-                               public void accept(Object data) throws Exception {
-                                   FeedActivity.this.whatever((List<FeedItemApiModel>) data);
-                               }
-                           },
-                        new Consumer() {
-                            @Override
-                            public void accept(Object e) throws Exception {
-                                FeedActivity.this.showError((Exception) e);
-                            }
-                        });
+                .subscribeOn(taskThreading.computation())
+                .observeOn(taskThreading.ui())
+                .subscribe(data -> whatever((List<FeedItemApiModel>) data),
+                        e -> showError((Exception) e));
     }
 
     @Override

@@ -52,12 +52,14 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             buildConfigField "String", "BASE_URL_API", '"https://api.flickr.com/services/"'
+            buildConfigField "String", "JSON_FORMAT", '"json"'
             debuggable true
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL_API", '"https://api.flickr.com/services/"'
+            buildConfigField "String", "JSON_FORMAT", '"json"'
             debuggable false
         }
     }

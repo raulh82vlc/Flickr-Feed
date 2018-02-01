@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.feed.di;
+package com.raulh82vlc.flickrj.threading;
 
-
-import dagger.Module;
+import io.reactivex.Scheduler;
 
 /**
- * Module which provides all user required artifacts
- * (presenter, interactors)
- * in order to use them in a decoupled way
- *
- * @author Raul Hernandez Lopez
+ * Task threading contract to use different main or backthread scenarios depending on the needs
+ * @author Raul Hernandez Lopez.
  */
-@Module
-public class FeedModule {
-    /*
-    @Provides
-    @ActivityScope
-    FeedPresenter provideFeedPresenter(FeedPresenterImpl presenter) {
-        return presenter;
-    }
-    */
+
+public interface TaskThreading {
+    Scheduler ui();
+
+    Scheduler computation();
+
+    Scheduler io();
 }

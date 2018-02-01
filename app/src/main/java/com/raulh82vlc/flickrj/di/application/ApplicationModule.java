@@ -19,6 +19,9 @@ package com.raulh82vlc.flickrj.di.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.raulh82vlc.flickrj.threading.TaskThreading;
+import com.raulh82vlc.flickrj.threading.TaskThreadingImpl;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -47,5 +50,11 @@ public class ApplicationModule {
     @Singleton
     Context provideApplicationContext() {
         return application.getApplicationContext();
+    }
+
+    @Provides
+    @Singleton
+    TaskThreading provideExecutionThread(TaskThreadingImpl taskThreading) {
+        return taskThreading;
     }
 }

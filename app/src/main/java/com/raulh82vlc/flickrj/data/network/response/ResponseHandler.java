@@ -41,7 +41,7 @@ public class ResponseHandler {
 
     public String extractJSONFromResponse(final String response) {
         String responseOutput = response.replaceFirst(JSON_FLICKR_FEED_KEYWORD, "");
-        return responseOutput.substring(0, response.length() - 1);
+        return responseOutput.substring(0, responseOutput.length() - 1);
     }
 
     public FeedApiModel deserializeFeedJSON(String responseJson) {

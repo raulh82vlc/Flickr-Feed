@@ -22,14 +22,13 @@ import com.raulh82vlc.flickrj.data.network.exceptions.NoNetConnectionException;
 import com.raulh82vlc.flickrj.data.network.model.FeedApiModel;
 import com.raulh82vlc.flickrj.data.network.model.FeedItemApiModel;
 import com.raulh82vlc.flickrj.data.network.response.ResponseHandler;
+import com.raulh82vlc.flickrj.threading.TaskThreading;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -42,24 +41,27 @@ public class NetworkDataSourceImpl implements NetworkDataSource<FeedItemApiModel
     private final FeedApi feedApi;
     private final ConnectionHandler connectionHandler;
     private final ResponseHandler responseHandler;
+    private final TaskThreading taskThreading;
+    private final String jsonFormat;
 
     @Inject
     public NetworkDataSourceImpl(FeedApi feedApi, ConnectionHandler connectionHandler,
-                                 ResponseHandler responseHandler) {
+                                 ResponseHandler responseHandler, TaskThreading taskThreading,
+                                 final String jsonFormat) {
         this.feedApi = feedApi;
         this.connectionHandler = connectionHandler;
         this.responseHandler = responseHandler;
-        //TODO "json" parameter at request into gradle variable
+        this.taskThreading = taskThreading;
+        this.jsonFormat = jsonFormat;
     }
 
     //TODO datasource passes this list of API model and Repo transforms it into a cache model
     //TODO repo does a zip of both cache & API fresh results and returns it back
-    //TODO inject subscriber to be able to mock it
     @Override
     public Single<List<FeedItemApiModel>> getFeed() {
-        return feedApi.getFeed("json")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+        return feedApi.getFeed(jsonFormat)
+                .observeOn(taskThreading.computation())
+                .subscribeOn(taskThreading.io())
                 .compose(body -> connectionHandler.isThereConnection()
                         ? body
                         : Single.error(new NoNetConnectionException("No Internet")))
