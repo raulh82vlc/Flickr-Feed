@@ -19,6 +19,7 @@ package com.raulh82vlc.flickrj.data.network.datasource;
 import com.google.gson.Gson;
 import com.raulh82vlc.flickrj.data.network.FeedApi;
 import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandler;
+import com.raulh82vlc.flickrj.data.network.exceptions.NoNetConnectionException;
 import com.raulh82vlc.flickrj.data.network.model.FeedApiModel;
 import com.raulh82vlc.flickrj.data.network.model.FeedItemApiModel;
 
@@ -52,7 +53,6 @@ public class NetworkDataSourceImpl implements NetworkDataSource<FeedItemApiModel
 
     //TODO datasource passes this list of API model and Repo transforms it into a cache model
     //TODO repo does a zip of both cache & API fresh results and returns it back
-    //TODO use a compose with connection check to pass a custom internet exception
     //TODO inject subscriber to be able to mock it
     //TODO wrap Gson to use a lighter mock for test
     @Override
@@ -60,6 +60,7 @@ public class NetworkDataSourceImpl implements NetworkDataSource<FeedItemApiModel
         return feedApi.getFeed("json")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .compose(o -> connectionHandler.isThereConnection() ? o : Single.error(new NoNetConnectionException("No Internet")))
                 .filter(responseBodyResult ->
                         !responseBodyResult.isError() && responseBodyResult.response() != null)
                 .map(responseBodyResult -> responseBodyResult.response().body().string())

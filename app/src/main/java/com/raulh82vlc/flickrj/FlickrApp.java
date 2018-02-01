@@ -22,7 +22,6 @@ import com.raulh82vlc.flickrj.di.application.ApplicationComponent;
 import com.raulh82vlc.flickrj.di.application.ApplicationModule;
 import com.raulh82vlc.flickrj.di.application.DaggerApplicationComponent;
 
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 /**
