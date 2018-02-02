@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.data.network.datasource;
-
-import java.util.List;
-
-import io.reactivex.Single;
+package com.raulh82vlc.flickrj.data.datasource.network.connection;
 
 /**
- * Network Operations API contract
- *
- * @author Raul Hernandez Lopez
+ * Connection Handler which checks if there is connection
+ * @author Raul Hernandez Lopez.
  */
-public interface NetworkDataSource<C> {
 
-    /**
-     * Gets a the list of comics from the Network
-     **/
-    Single<List<C>> getFeed();
+public interface ConnectionHandler {
+    boolean isThereConnection();
 }

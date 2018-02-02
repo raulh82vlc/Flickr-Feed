@@ -14,32 +14,33 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.data.network.model;
+package com.raulh82vlc.flickrj.data.datasource.network.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
- * Feed Api Model coming from backend
  * @author Raul Hernandez Lopez.
  */
 
-public class FeedApiModel {
-    @SerializedName("stat")
-    private String statusOfCall;
+public class FeedItemApiModel {
     @SerializedName("title")
     private String title;
     @SerializedName("link")
     private String link;
+    @SerializedName("media")
+    private MediaItem media;
     @SerializedName("description")
     private String description;
-    @SerializedName("modified")
-    private String modified;
-    @SerializedName("generator")
-    private String generator;
-    @SerializedName("items")
-    private List<FeedItemApiModel> feedItems;
+    @SerializedName("date_taken")
+    private String dateTaken;
+    @SerializedName("published")
+    private String published;
+    @SerializedName("author")
+    private String author;
+    @SerializedName("author_id")
+    private String authorId;
+    @SerializedName("tags")
+    private String tags;
 
     public String getTitle() {
         return title;
@@ -49,23 +50,40 @@ public class FeedApiModel {
         return link;
     }
 
+    public MediaItem getMedia() {
+        return media;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    public String getModified() {
-        return modified;
+    public String getDateTaken() {
+        return dateTaken;
     }
 
-    public String getGenerator() {
-        return generator;
+    public String getPublished() {
+        return published;
     }
 
-    public List<FeedItemApiModel> getFeedItems() {
-        return feedItems;
+    public String getAuthor() {
+        return author;
     }
 
-    public String getStatusOfCall() {
-        return statusOfCall == null || statusOfCall.isEmpty() ? "ok" : statusOfCall;
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public static class MediaItem {
+        @SerializedName("m")
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
     }
 }

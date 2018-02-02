@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.data.network.connection;
+package com.raulh82vlc.flickrj.data.datasource.network.connection;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

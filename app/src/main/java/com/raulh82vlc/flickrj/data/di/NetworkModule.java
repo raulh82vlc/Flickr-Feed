@@ -18,12 +18,12 @@ package com.raulh82vlc.flickrj.data.di;
 
 import com.google.gson.Gson;
 import com.raulh82vlc.flickrj.BuildConfig;
-import com.raulh82vlc.flickrj.data.network.FeedApi;
-import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandler;
-import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandlerImpl;
-import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
-import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSourceImpl;
-import com.raulh82vlc.flickrj.data.network.response.ResponseHandler;
+import com.raulh82vlc.flickrj.data.datasource.network.FeedApi;
+import com.raulh82vlc.flickrj.data.datasource.network.connection.ConnectionHandler;
+import com.raulh82vlc.flickrj.data.datasource.network.connection.ConnectionHandlerImpl;
+import com.raulh82vlc.flickrj.data.datasource.network.NetworkDataSource;
+import com.raulh82vlc.flickrj.data.datasource.network.NetworkDataSourceImpl;
+import com.raulh82vlc.flickrj.data.datasource.network.response.ResponseHandler;
 import com.raulh82vlc.flickrj.threading.TaskThreading;
 
 import java.util.concurrent.TimeUnit;

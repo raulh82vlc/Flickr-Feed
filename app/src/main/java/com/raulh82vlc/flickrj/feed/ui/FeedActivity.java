@@ -24,8 +24,8 @@ import android.view.MenuItem;
 
 import com.raulh82vlc.flickrj.FlickrApp;
 import com.raulh82vlc.flickrj.R;
-import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
-import com.raulh82vlc.flickrj.data.network.model.FeedItemApiModel;
+import com.raulh82vlc.flickrj.data.datasource.network.NetworkDataSource;
+import com.raulh82vlc.flickrj.data.datasource.network.model.FeedItemApiModel;
 import com.raulh82vlc.flickrj.feed.di.DaggerFeedComponent;
 import com.raulh82vlc.flickrj.feed.di.FeedComponent;
 import com.raulh82vlc.flickrj.threading.TaskThreading;

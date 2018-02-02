@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.data.network;
+package com.raulh82vlc.flickrj.data.datasource.network;
 
 import io.reactivex.Single;
 import okhttp3.ResponseBody;

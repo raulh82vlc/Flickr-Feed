@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.data.network.model;
+package com.raulh82vlc.flickrj.data.datasource.network.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
+ * Feed Api Model coming from backend
  * @author Raul Hernandez Lopez.
  */
 
-public class FeedItemApiModel {
+public class FeedApiModel {
+    @SerializedName("stat")
+    private String statusOfCall;
     @SerializedName("title")
     private String title;
     @SerializedName("link")
     private String link;
-    @SerializedName("media")
-    private MediaItem media;
     @SerializedName("description")
     private String description;
-    @SerializedName("date_taken")
-    private String dateTaken;
-    @SerializedName("published")
-    private String published;
-    @SerializedName("author")
-    private String author;
-    @SerializedName("author_id")
-    private String authorId;
-    @SerializedName("tags")
-    private String tags;
+    @SerializedName("modified")
+    private String modified;
+    @SerializedName("generator")
+    private String generator;
+    @SerializedName("items")
+    private List<FeedItemApiModel> feedItems;
 
     public String getTitle() {
         return title;
@@ -50,40 +49,23 @@ public class FeedItemApiModel {
         return link;
     }
 
-    public MediaItem getMedia() {
-        return media;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public String getDateTaken() {
-        return dateTaken;
+    public String getModified() {
+        return modified;
     }
 
-    public String getPublished() {
-        return published;
+    public String getGenerator() {
+        return generator;
     }
 
-    public String getAuthor() {
-        return author;
+    public List<FeedItemApiModel> getFeedItems() {
+        return feedItems;
     }
 
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public static class MediaItem {
-        @SerializedName("m")
-        private String url;
-
-        public String getUrl() {
-            return url;
-        }
+    public String getStatusOfCall() {
+        return statusOfCall == null || statusOfCall.isEmpty() ? "ok" : statusOfCall;
     }
 }

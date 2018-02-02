@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.data.network.datasource;
+package com.raulh82vlc.flickrj.data.datasource.network;
 
-import com.raulh82vlc.flickrj.data.network.FeedApi;
-import com.raulh82vlc.flickrj.data.network.connection.ConnectionHandler;
-import com.raulh82vlc.flickrj.data.network.exceptions.NoNetConnectionException;
-import com.raulh82vlc.flickrj.data.network.model.FeedApiModel;
-import com.raulh82vlc.flickrj.data.network.model.FeedItemApiModel;
-import com.raulh82vlc.flickrj.data.network.response.ResponseHandler;
+import com.raulh82vlc.flickrj.data.datasource.network.connection.ConnectionHandler;
+import com.raulh82vlc.flickrj.data.datasource.network.exceptions.NoNetConnectionException;
+import com.raulh82vlc.flickrj.data.datasource.network.model.FeedItemApiModel;
+import com.raulh82vlc.flickrj.data.datasource.network.response.ResponseHandler;
 import com.raulh82vlc.flickrj.threading.TaskThreading;
 
 import java.util.List;
@@ -55,8 +53,6 @@ public class NetworkDataSourceImpl implements NetworkDataSource<FeedItemApiModel
         this.jsonFormat = jsonFormat;
     }
 
-    //TODO datasource passes this list of API model and Repo transforms it into a cache model
-    //TODO repo does a zip of both cache & API fresh results and returns it back
     @Override
     public Single<List<FeedItemApiModel>> getFeed() {
         return feedApi.getFeed(jsonFormat)
@@ -64,15 +60,14 @@ public class NetworkDataSourceImpl implements NetworkDataSource<FeedItemApiModel
                 .subscribeOn(taskThreading.io())
                 .compose(body -> connectionHandler.isThereConnection()
                         ? body
-                        : Single.error(new NoNetConnectionException("No Internet")))
-                .filter(responseBodyResult ->
-                        !responseBodyResult.isError() && responseBodyResult.response() != null)
-                .map(responseBodyResult -> responseBodyResult.response().body().string())
+                        : Single.error(new NoNetConnectionException("No Internet connection")))
+                .filter(responseHandler::hasNoErrorResponse)
+                .map(responseHandler::getStringContent)
                 .filter(responseHandler::hasFeedFormat)
                 .map(responseHandler::extractJSONFromResponse)
                 .map(responseHandler::deserializeFeedJSON)
                 .filter(apiModelSingle -> responseHandler.hasNoApiFailure(apiModelSingle.getStatusOfCall()))
-                .map(FeedApiModel::getFeedItems)
+                .map(responseHandler::returnListOfItems)
                 .flatMapSingle(Single::just);
     }
 }

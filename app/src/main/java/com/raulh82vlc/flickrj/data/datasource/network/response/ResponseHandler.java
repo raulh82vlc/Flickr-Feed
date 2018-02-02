@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.data.network.response;
+package com.raulh82vlc.flickrj.data.datasource.network.response;
 
 import com.google.gson.Gson;
-import com.raulh82vlc.flickrj.data.network.model.FeedApiModel;
+import com.raulh82vlc.flickrj.data.datasource.network.model.FeedApiModel;
+import com.raulh82vlc.flickrj.data.datasource.network.model.FeedItemApiModel;
+
+import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
+
+import okhttp3.ResponseBody;
+import retrofit2.adapter.rxjava2.Result;
 
 /**
  * Response handler extracts JSON responses as well as validates right format of the responses
@@ -54,5 +61,17 @@ public class ResponseHandler {
 
     public boolean hasNoApiFailure(String jsonResponseResult) {
         return !jsonResponseResult.equals(STAT_FAILURE);
+    }
+
+    public boolean hasNoErrorResponse(Result<ResponseBody> responseBodyResult) {
+        return !responseBodyResult.isError() && responseBodyResult.response() != null;
+    }
+
+    public String getStringContent(Result<ResponseBody> responseBodyResult) throws IOException {
+        return responseBodyResult.response().body().string();
+    }
+
+    public List<FeedItemApiModel> returnListOfItems(FeedApiModel feedApiModel) {
+        return feedApiModel.getFeedItems();
     }
 }

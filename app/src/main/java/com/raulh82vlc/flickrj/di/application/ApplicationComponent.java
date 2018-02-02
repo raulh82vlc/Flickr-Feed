@@ -21,7 +21,7 @@ import android.content.Context;
 
 import com.raulh82vlc.flickrj.FlickrApp;
 import com.raulh82vlc.flickrj.data.di.NetworkModule;
-import com.raulh82vlc.flickrj.data.network.datasource.NetworkDataSource;
+import com.raulh82vlc.flickrj.data.datasource.network.NetworkDataSource;
 import com.raulh82vlc.flickrj.threading.TaskThreading;
 
 import javax.inject.Singleton;
