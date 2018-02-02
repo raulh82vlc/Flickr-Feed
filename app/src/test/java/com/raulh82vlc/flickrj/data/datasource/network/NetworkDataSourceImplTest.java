@@ -18,6 +18,7 @@ package com.raulh82vlc.flickrj.data.datasource.network;
 
 import com.raulh82vlc.flickrj.data.FileReaderHelper;
 import com.raulh82vlc.flickrj.data.datasource.network.connection.ConnectionHandler;
+import com.raulh82vlc.flickrj.data.datasource.network.exceptions.NoNetConnectionException;
 import com.raulh82vlc.flickrj.data.datasource.network.model.FeedApiModel;
 import com.raulh82vlc.flickrj.data.datasource.network.model.FeedItemApiModel;
 import com.raulh82vlc.flickrj.data.datasource.network.response.ResponseHandler;
@@ -46,6 +47,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -84,7 +86,7 @@ public class NetworkDataSourceImplTest {
     }
 
     @Test
-    public void getFeed() throws Exception {
+    public void getFeedPassesListIfResponseIsSuccessful() throws Exception {
         when(feedApi.getFeed(anyString())).thenReturn(getMockSingleResult());
         when(connectionHandler.isThereConnection()).thenReturn(true);
         when(responseHandler.hasFeedFormat(anyString())).thenReturn(true);
@@ -111,6 +113,24 @@ public class NetworkDataSourceImplTest {
         testSubscriber.assertValue(single.blockingGet());
         assertEquals(new ArrayList<>(), single.blockingGet());
         testSubscriber.assertValueCount(1);
+    }
+
+    @Test
+    public void getFeedStopsIfNoConnection() throws Exception {
+        when(feedApi.getFeed(anyString())).thenReturn(getMockSingleResult());
+        when(connectionHandler.isThereConnection()).thenReturn(false);
+
+        TestObserver<List<FeedItemApiModel>> testSubscriber = new TestObserver<>();
+
+        Single<List<FeedItemApiModel>> single = underTestNetworkDataSource.getFeed();
+
+        assertNotNull(single);
+        single.subscribe(testSubscriber);
+        testSubscriber.assertSubscribed();
+        verify(responseHandler, never()).hasNoErrorResponse(any());
+        verify(responseHandler, never()).getStringContent(any());
+        testSubscriber.assertError(NoNetConnectionException.class);
+        testSubscriber.assertValueCount(0);
     }
 
     private Single<Result<ResponseBody>> getMockSingleResult() {
