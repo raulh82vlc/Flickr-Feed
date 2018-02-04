@@ -32,3 +32,5 @@ script:
   - echo "Travis branch is in pull request $TRAVIS_PULL+REQUEST"
   - ./gradlew checkstyle clean build test
 after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
+before_install:
+- yes | sdkmanager "platforms;android-27"
