@@ -30,11 +30,11 @@ import io.reactivex.Single;
 
 
 /**
- * Declared read operations from the Network API interface
+ * Declared Network data source for the API
  *
  * @author Raul Hernandez Lopez
  */
-public class NetworkDataSourceImpl implements NetworkDataSource<FeedItemApiModel> {
+public class NetworkDataSourceImpl implements NetworkDataSource {
 
     private final FeedApi feedApi;
     private final ConnectionHandler connectionHandler;

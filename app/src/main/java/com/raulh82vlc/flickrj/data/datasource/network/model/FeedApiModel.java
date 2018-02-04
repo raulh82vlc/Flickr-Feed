@@ -24,7 +24,6 @@ import java.util.List;
  * Feed Api Model coming from backend
  * @author Raul Hernandez Lopez.
  */
-
 public class FeedApiModel {
     @SerializedName("stat")
     private String statusOfCall;

@@ -16,19 +16,21 @@
 
 package com.raulh82vlc.flickrj.data.datasource.network;
 
+import com.raulh82vlc.flickrj.data.datasource.network.model.FeedItemApiModel;
+
 import java.util.List;
 
 import io.reactivex.Single;
 
 /**
- * Network Operations API contract
+ * Network data source contract
  *
  * @author Raul Hernandez Lopez
  */
-public interface NetworkDataSource<C> {
+public interface NetworkDataSource {
 
     /**
-     * Gets a the list of comics from the Network
+     * Gets a list of feed
      **/
-    Single<List<C>> getFeed();
+    Single<List<FeedItemApiModel>> getFeed();
 }

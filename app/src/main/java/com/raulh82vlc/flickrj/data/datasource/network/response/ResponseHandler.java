@@ -38,6 +38,7 @@ public class ResponseHandler {
     private static final String JSON_FLICKR_FEED_KEYWORD = "jsonFlickrFeed\\(";
     private static final String JSON_FLICKR_FEED_LITERAL = "jsonFlickrFeed(";
     private static final String STAT_FAILURE = "fail";
+    private static final String STAT_OK = "ok";
 
     private final Gson gson;
 
@@ -60,7 +61,7 @@ public class ResponseHandler {
     }
 
     public boolean hasNoApiFailure(String jsonResponseResult) {
-        return !jsonResponseResult.equals(STAT_FAILURE);
+        return !jsonResponseResult.equals(STAT_FAILURE) && jsonResponseResult.equals(STAT_OK);
     }
 
     public boolean hasNoErrorResponse(Result<ResponseBody> responseBodyResult) {

@@ -52,6 +52,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
+ * Network data source unit tests
  * @author Raul Hernandez Lopez.
  */
 public class NetworkDataSourceImplTest {
@@ -68,7 +69,7 @@ public class NetworkDataSourceImplTest {
     @Mock
     ResponseHandler responseHandler;
 
-    private NetworkDataSourceImpl underTestNetworkDataSource;
+    private NetworkDataSource underTestNetworkDataSource;
 
     @Before
     public void setUp() throws Exception {
