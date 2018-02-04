@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 
 /**
- * Declared read operations from the Network API interface
+ * Cache data source implementation {@link CacheDataSource} where the repo has its data saved
  *
  * @author Raul Hernandez Lopez
  */

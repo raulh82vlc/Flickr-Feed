@@ -52,7 +52,7 @@ public class NetworkToCacheMapperTest {
         List<FeedItemApiModel> itemsFromAPI = new Gson().fromJson(json, listType);
 
         List<FeedItemCacheModel> listOfCachedItems = networkToCacheMapper.map(itemsFromAPI);
-        
+
         assertEquals("Bookshelf", listOfCachedItems.get(0).getTitle());
         assertEquals("45737848@N07", listOfCachedItems.get(0).getAuthorId());
         assertEquals("ifttt", listOfCachedItems.get(0).getTags().get(0));
