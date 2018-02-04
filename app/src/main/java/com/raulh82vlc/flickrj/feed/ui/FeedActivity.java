@@ -24,55 +24,29 @@ import android.view.MenuItem;
 
 import com.raulh82vlc.flickrj.FlickrApp;
 import com.raulh82vlc.flickrj.R;
-import com.raulh82vlc.flickrj.data.datasource.cache.model.FeedItemCacheModel;
-import com.raulh82vlc.flickrj.data.repository.FeedRepository;
+import com.raulh82vlc.flickrj.di.activity.ActivityModule;
 import com.raulh82vlc.flickrj.feed.di.DaggerFeedComponent;
 import com.raulh82vlc.flickrj.feed.di.FeedComponent;
-import com.raulh82vlc.flickrj.threading.TaskThreading;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import timber.log.Timber;
-
-public class FeedActivity extends AppCompatActivity {
+public class FeedActivity extends BaseActivity {
 
     private FeedComponent feedComponent;
 
-    @Inject
-    FeedRepository feedRepository;
-    @Inject
-    TaskThreading taskThreading;
-
-    private void showError(Throwable e) {
-        Timber.e(e.getMessage());
-    }
-
-    private void whatever(List<FeedItemCacheModel> modelList) {
-        Timber.d("int " + modelList.size());
-        for (FeedItemCacheModel item : modelList) {
-            for (String tag : item.getTags()) {
-                Timber.d(tag);
-            }
-        }
-    }
-
-    public void startRequest() {
-        feedRepository.getFeed()
-                .subscribeOn(taskThreading.computation())
-                .observeOn(taskThreading.ui())
-                .subscribe(data -> whatever(data),
-                        e -> showError(e));
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_feed;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected AppCompatActivity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed);
         setSupportActionBar(findViewById(R.id.toolbar));
         getComponentInstance().inject(this);
-        startRequest();
     }
 
     @Override
@@ -97,6 +71,7 @@ public class FeedActivity extends AppCompatActivity {
         if (feedComponent == null) {
             feedComponent = DaggerFeedComponent.builder()
                     .applicationComponent(((FlickrApp) getApplication()).getComponentInstance())
+                    .activityModule(new ActivityModule(this))
                     .build();
         }
         return feedComponent;

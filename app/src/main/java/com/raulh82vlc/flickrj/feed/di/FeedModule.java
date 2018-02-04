@@ -17,22 +17,34 @@
 package com.raulh82vlc.flickrj.feed.di;
 
 
+import com.raulh82vlc.flickrj.common.threading.TaskThreading;
+import com.raulh82vlc.flickrj.di.activity.scopes.ActivityScope;
+import com.raulh82vlc.flickrj.feed.data.repository.FeedRepository;
+import com.raulh82vlc.flickrj.feed.domain.usecase.GetFeedUseCase;
+import com.raulh82vlc.flickrj.feed.presentation.FeedPresenter;
+
 import dagger.Module;
+import dagger.Provides;
 
 /**
  * Module which provides all user required artifacts
- * (presenter, interactors)
+ * (presenter, use cases)
  * in order to use them in a decoupled way
  *
  * @author Raul Hernandez Lopez
  */
 @Module
 public class FeedModule {
-    /*
+
     @Provides
     @ActivityScope
-    FeedPresenter provideFeedPresenter(FeedPresenterImpl presenter) {
-        return presenter;
+    FeedPresenter provideFeedPresenter(GetFeedUseCase getFeedUseCase) {
+        return new FeedPresenter(getFeedUseCase);
     }
-    */
+
+    @Provides
+    @ActivityScope
+    GetFeedUseCase provideGetFeedUseCase(FeedRepository feedRepository, TaskThreading taskThreading) {
+        return new GetFeedUseCase(feedRepository, taskThreading);
+    }
 }
