@@ -16,22 +16,42 @@
 
 package com.raulh82vlc.flickrj.feed.presentation;
 
+import com.raulh82vlc.flickrj.feed.domain.usecase.GetFeedUseCase;
+import com.raulh82vlc.flickrj.feed.domain.usecase_callback.GetFeedCallback;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 
 /**
+ * Feed presenter tests
  * @author Raul Hernandez Lopez.
  */
 public class FeedPresenterTest {
+
+    @Mock
+    private GetFeedUseCase useCase;
+    @Mock
+    private FeedPresenter.View view;
+
+    private FeedPresenter underTestPresenter;
+
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        underTestPresenter = new FeedPresenter(useCase);
+        underTestPresenter.setView(view);
+    }
+
     @Test
     public void getFeed() throws Exception {
-    }
 
-    @Test
-    public void setView() throws Exception {
-    }
+        underTestPresenter.getFeed();
 
-    @Test
-    public void removeView() throws Exception {
+        verify(useCase).execute(any(GetFeedCallback.class));
     }
-
 }
