@@ -21,7 +21,8 @@ import android.content.Context;
 
 import com.raulh82vlc.flickrj.FlickrApp;
 import com.raulh82vlc.flickrj.data.di.NetworkModule;
-import com.raulh82vlc.flickrj.data.datasource.network.NetworkDataSource;
+import com.raulh82vlc.flickrj.data.repository.FeedRepository;
+import com.raulh82vlc.flickrj.data.repository.RepositoryModule;
 import com.raulh82vlc.flickrj.threading.TaskThreading;
 
 import javax.inject.Singleton;
@@ -41,7 +42,8 @@ import dagger.Component;
 @Component(
         modules = {
                 ApplicationModule.class,
-                NetworkModule.class
+                NetworkModule.class,
+                RepositoryModule.class
         })
 public interface ApplicationComponent {
 
@@ -57,7 +59,7 @@ public interface ApplicationComponent {
      */
     Application application();
 
-    NetworkDataSource getNetWorkDataSource();
-
     TaskThreading getTaskThreading();
+
+    FeedRepository getRepository();
 }

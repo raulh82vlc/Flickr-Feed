@@ -24,8 +24,8 @@ import android.view.MenuItem;
 
 import com.raulh82vlc.flickrj.FlickrApp;
 import com.raulh82vlc.flickrj.R;
-import com.raulh82vlc.flickrj.data.datasource.network.NetworkDataSource;
-import com.raulh82vlc.flickrj.data.datasource.network.model.FeedItemApiModel;
+import com.raulh82vlc.flickrj.data.datasource.cache.model.FeedItemCacheModel;
+import com.raulh82vlc.flickrj.data.repository.FeedRepository;
 import com.raulh82vlc.flickrj.feed.di.DaggerFeedComponent;
 import com.raulh82vlc.flickrj.feed.di.FeedComponent;
 import com.raulh82vlc.flickrj.threading.TaskThreading;
@@ -41,7 +41,7 @@ public class FeedActivity extends AppCompatActivity {
     private FeedComponent feedComponent;
 
     @Inject
-    NetworkDataSource dataSource;
+    FeedRepository feedRepository;
     @Inject
     TaskThreading taskThreading;
 
@@ -49,16 +49,21 @@ public class FeedActivity extends AppCompatActivity {
         Timber.e(e.getMessage());
     }
 
-    private void whatever(List<FeedItemApiModel> modelList) {
+    private void whatever(List<FeedItemCacheModel> modelList) {
         Timber.d("int " + modelList.size());
+        for (FeedItemCacheModel item : modelList) {
+            for (String tag : item.getTags()) {
+                Timber.d(tag);
+            }
+        }
     }
 
     public void startRequest() {
-        dataSource.getFeed()
+        feedRepository.getFeed()
                 .subscribeOn(taskThreading.computation())
                 .observeOn(taskThreading.ui())
-                .subscribe(data -> whatever((List<FeedItemApiModel>) data),
-                        e -> showError((Exception) e));
+                .subscribe(data -> whatever(data),
+                        e -> showError(e));
     }
 
     @Override
