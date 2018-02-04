@@ -19,8 +19,8 @@ package com.raulh82vlc.flickrj.di.application;
 import android.app.Application;
 import android.content.Context;
 
-import com.raulh82vlc.flickrj.threading.TaskThreading;
-import com.raulh82vlc.flickrj.threading.TaskThreadingImpl;
+import com.raulh82vlc.flickrj.common.threading.TaskThreading;
+import com.raulh82vlc.flickrj.common.threading.TaskThreadingImpl;
 
 import javax.inject.Singleton;
 

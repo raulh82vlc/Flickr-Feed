@@ -20,10 +20,10 @@ import android.app.Application;
 import android.content.Context;
 
 import com.raulh82vlc.flickrj.FlickrApp;
-import com.raulh82vlc.flickrj.data.di.NetworkModule;
-import com.raulh82vlc.flickrj.data.repository.FeedRepository;
-import com.raulh82vlc.flickrj.data.repository.RepositoryModule;
-import com.raulh82vlc.flickrj.threading.TaskThreading;
+import com.raulh82vlc.flickrj.feed.data.di.NetworkModule;
+import com.raulh82vlc.flickrj.feed.data.repository.FeedRepository;
+import com.raulh82vlc.flickrj.feed.data.di.RepositoryModule;
+import com.raulh82vlc.flickrj.common.threading.TaskThreading;
 
 import javax.inject.Singleton;
 
