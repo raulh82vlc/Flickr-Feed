@@ -58,12 +58,7 @@ public class FeedRepositoryImpl implements FeedRepository {
                 .subscribeOn(taskThreading.io())
                 .observeOn(taskThreading.computation())
                 .map(networkToCacheMapper::map)
-                .doOnSuccess(
-                        data -> {
-                            cacheDataSource.saveFeed(data);
-                            cacheDataSource.getFeed();
-                        }
-                );
+                .doOnSuccess(cacheDataSource::saveFeed);
     }
 
     @Override
