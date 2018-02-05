@@ -62,6 +62,10 @@ public class NetworkToCacheMapper implements Mapper<List<FeedItemApiModel>, List
 
     public List<String> mapTags(String tags) {
         String[] strings = tags.split(REGEX_WHITESPACE);
+        // this avoids empty space passed as a value
+        if (strings.length == 1 && strings[0].isEmpty()) {
+            return new ArrayList<>();
+        }
         return Arrays.asList(strings);
     }
 }

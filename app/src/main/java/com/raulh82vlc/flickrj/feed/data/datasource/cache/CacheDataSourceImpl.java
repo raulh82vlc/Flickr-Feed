@@ -48,6 +48,7 @@ public class CacheDataSourceImpl implements CacheDataSource {
     @Override
     public void saveFeed(List<FeedItemCacheModel> itemCacheModels) {
         listOfItems.clear();
+        dictionaryOfItems.clear();
         for (FeedItemCacheModel item : itemCacheModels) {
             listOfItems.add(item);
             dictionaryOfItems.put(item.getTitle() + item.getAuthorId(), item);

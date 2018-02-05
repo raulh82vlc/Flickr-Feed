@@ -64,9 +64,17 @@ public class NetworkToCacheMapperTest {
     @Test
     public void mapTags() throws Exception {
         List<String> tags = networkToCacheMapper.mapTags("Brazil Spain Mexico");
+
         assertEquals("Brazil", tags.get(0));
         assertEquals("Spain", tags.get(1));
         assertEquals("Mexico", tags.get(2));
+    }
+
+    @Test
+    public void mapNoTag() throws Exception {
+        List<String> tags = networkToCacheMapper.mapTags("");
+
+        assertEquals(0, tags.size());
     }
 
     private String getMockFeedResponse() {
