@@ -7,12 +7,18 @@ Shows latest Flickr feed images and metadata.
 The exchange between the different *layers* is as follows:
 - **Data layer**: from the *Repository*, which is responsible of the *data logic* and communicating results to the *Interactor*
 - **Domain layer**: from an *Interactor*, which is responsible of the *business logic* and communicating results to the *Presenter*
-- **Presenter layer**: from the *Presenter*, which orchestrates different interactors when required and also provides the final formatted info to a passive `View` from a UI element (fragments / activities).
+- **Presentation layer**: from the *Presenter*, which orchestrates different interactors when required and also provides the final formatted info to a passive `View` from a UI element (fragments / activities).
 Finally, this information would be passed through the UI thread.
+- All these 3 layers are tested in-depth. Therefore there is no need for UI testing, all the logic is tested.
 
 ### Features
-- Shows Flickr feed and meta data at detail view
+- Shows Flickr public feed
+- Shows detail view and its main meta data
+- Caches images (Picasso) & content on RAM memory (Cache data source)
+- Internet connection handling when no connection
 
+### Test results
+[Test results](./Test_Results_java_in_app.html)
 ### SDK support
 Support SDKs from **19** to **27**
 
