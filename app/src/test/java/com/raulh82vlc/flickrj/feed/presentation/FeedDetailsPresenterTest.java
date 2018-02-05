@@ -47,10 +47,19 @@ public class FeedDetailsPresenterTest {
         underTestPresenter = new FeedDetailsPresenter(useCase);
         underTestPresenter.setView(view);
     }
+
     @Test
     public void getFeedItem() throws Exception {
         underTestPresenter.getFeedItem("a", "b");
 
         verify(useCase).execute(any(GetFeedDetailsCallback.class), anyString(), anyString());
+    }
+
+    @Test
+    public void dispose() throws Exception {
+
+        underTestPresenter.removeView();
+
+        verify(useCase).dispose();
     }
 }

@@ -54,4 +54,12 @@ public class FeedPresenterTest {
 
         verify(useCase).execute(any(GetFeedCallback.class));
     }
+
+    @Test
+    public void dispose() throws Exception {
+
+        underTestPresenter.removeView();
+
+        verify(useCase).dispose();
+    }
 }

@@ -65,6 +65,7 @@ public class FeedDetailsPresenter {
     }
 
     public void removeView() {
+        feedDetailsUseCase.dispose();
         view = null;
     }
 }
