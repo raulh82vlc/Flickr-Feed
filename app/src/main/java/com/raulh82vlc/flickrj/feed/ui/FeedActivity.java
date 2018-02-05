@@ -18,7 +18,9 @@
 package com.raulh82vlc.flickrj.feed.ui;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -28,9 +30,13 @@ import com.raulh82vlc.flickrj.di.activity.ActivityModule;
 import com.raulh82vlc.flickrj.feed.di.DaggerFeedComponent;
 import com.raulh82vlc.flickrj.feed.di.FeedComponent;
 
+import butterknife.BindView;
+
 public class FeedActivity extends BaseActivity {
 
     private FeedComponent feedComponent;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected int getLayoutId() {
@@ -45,14 +51,18 @@ public class FeedActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSupportActionBar(findViewById(R.id.toolbar));
         getComponentInstance().inject(this);
+        setToolbarInitialisation();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_feed, menu);
-        return true;
+    protected void setToolbarInitialisation() {
+        setSupportActionBar(toolbar);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+        toolbar.setTitle(getString(R.string.app_name));
     }
 
     @Override
@@ -65,6 +75,12 @@ public class FeedActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_feed, menu);
+        return true;
     }
 
     public FeedComponent getComponentInstance() {

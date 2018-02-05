@@ -16,31 +16,46 @@
 package com.raulh82vlc.flickrj.feed.ui;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.raulh82vlc.flickrj.R;
 import com.raulh82vlc.flickrj.feed.data.datasource.cache.model.FeedItemCacheModel;
 import com.raulh82vlc.flickrj.feed.presentation.FeedPresenter;
+import com.raulh82vlc.flickrj.feed.ui.adapter.FeedListAdapter;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
+import butterknife.BindView;
 
 /**
  * Fragment with Content of the feed
  */
-public class FeedFragment extends BaseFragment implements FeedPresenter.View {
+public class FeedFragment extends BaseFragment implements FeedPresenter.View,
+        FeedListAdapter.OnItemClickListener {
+    /**
+     * UI injections
+     */
+    @BindView(R.id.recycler_view)
+    public RecyclerView recyclerView;
+    @BindView(R.id.no_results_view)
+    public TextView noResultsTextView;
 
     @Inject
     FeedPresenter presenter;
 
     private FeedActivity activity;
+    private FeedListAdapter adapter;
 
     public FeedFragment() {
     }
@@ -52,9 +67,10 @@ public class FeedFragment extends BaseFragment implements FeedPresenter.View {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         presenter.removeView();
-        super.onDestroy();
+        adapter = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -74,32 +90,40 @@ public class FeedFragment extends BaseFragment implements FeedPresenter.View {
         super.onActivityCreated(savedInstanceState);
         activity.getComponentInstance().inject(this);
         presenter.setView(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+        setRecyclerView();
         presenter.getFeed();
     }
 
+    /**
+     * <p>Sets the adapter and recyclerview</p>
+     **/
+    private void setRecyclerView() {
+        adapter = new FeedListAdapter();
+        adapter.setOnItemClickFromList(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+    }
+
     @Override
-    public void updateList(List<FeedItemCacheModel> items) {
-        Timber.d("int " + items.size());
-        for (FeedItemCacheModel item : items) {
-            for (String tag : item.getTags()) {
-                Timber.d(tag);
-            }
+    public void showAnimation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            recyclerView.scheduleLayoutAnimation();
         }
     }
 
     @Override
-    public void showList() {
+    public void updateList(List<FeedItemCacheModel> items) {
+        adapter.updateFeed(items);
+    }
 
+    @Override
+    public void showList() {
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideList() {
-
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -115,11 +139,20 @@ public class FeedFragment extends BaseFragment implements FeedPresenter.View {
 
     @Override
     public void showError(String message) {
-
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        noResultsTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideError() {
+        noResultsTextView.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void onItemFromListClick(FeedItemCacheModel feedItemCacheModel, View view) {
+        /** go to the detail screen */
+        //TODO
+        // FeedDetailsActivity.navigateToDetailsActivity(activity, feedItemCacheModel.getTitle(),
+        //        view.findViewById(R.id.iv_image));
     }
 }

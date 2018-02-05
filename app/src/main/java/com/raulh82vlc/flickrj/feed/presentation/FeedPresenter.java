@@ -34,6 +34,7 @@ public class FeedPresenter {
     private View view;
 
     public interface View {
+        void showAnimation();
         void updateList(List<FeedItemCacheModel> items);
         void showList();
         void hideList();

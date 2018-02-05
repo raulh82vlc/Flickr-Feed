@@ -40,6 +40,7 @@ public class GetFeedCallbackImpl implements GetFeedCallback {
         view.hideLoader();
         view.showList();
         view.updateList(feedItems);
+        view.showAnimation();
     }
 
     @Override
