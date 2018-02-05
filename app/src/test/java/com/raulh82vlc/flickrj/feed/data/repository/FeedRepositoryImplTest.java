@@ -16,12 +16,12 @@
 
 package com.raulh82vlc.flickrj.feed.data.repository;
 
+import com.raulh82vlc.flickrj.common.threading.TaskThreading;
 import com.raulh82vlc.flickrj.feed.data.datasource.cache.CacheDataSource;
 import com.raulh82vlc.flickrj.feed.data.datasource.cache.model.FeedItemCacheModel;
 import com.raulh82vlc.flickrj.feed.data.datasource.network.NetworkDataSource;
 import com.raulh82vlc.flickrj.feed.data.datasource.network.model.FeedItemApiModel;
 import com.raulh82vlc.flickrj.feed.data.repository.mapper.NetworkToCacheMapper;
-import com.raulh82vlc.flickrj.common.threading.TaskThreading;
 
 import org.junit.After;
 import org.junit.Before;

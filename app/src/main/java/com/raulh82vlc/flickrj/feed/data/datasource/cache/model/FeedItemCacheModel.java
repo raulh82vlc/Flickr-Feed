@@ -36,6 +36,8 @@ public class FeedItemCacheModel {
     private String authorId;
     private List<String> tags;
 
+    public FeedItemCacheModel() { }
+
     public FeedItemCacheModel(String title, String link, FeedItemCacheModel.MediaItem media,
                               String description, String dateTaken, String published, String author,
                               String authorId, List<String> tags) {

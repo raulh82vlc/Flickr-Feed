@@ -66,6 +66,9 @@ public class CacheDataSourceImplTest {
             assertEquals(itemsInput.get(i).getTitle(), items.get(i).getTitle());
             assertEquals(itemsInput.get(i).getDescription(), items.get(i).getDescription());
             assertEquals(itemsInput.get(i).getTags().get(0), items.get(i).getTags().get(0));
+            // Tests dictionary by Title + AuthorId
+            assertEquals(items.get(i).getLink(), cacheNetworkDataSource
+                    .getItemFromFeed(items.get(i).getTitle(), items.get(i).getAuthorId()).getLink());
         }
     }
 

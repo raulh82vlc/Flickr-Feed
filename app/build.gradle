@@ -78,6 +78,7 @@ dependencies {
     implementation "com.android.support:design:$libDesignCompat"
     implementation "com.android.support.constraint:constraint-layout:$libConstraintLayout"
     implementation "com.android.support:recyclerview-v7:$libRecyclerView"
+    implementation "com.android.support:cardview-v7:$libCardView"
     implementation "javax.inject:javax.inject:$libInject"
     annotationProcessor "com.google.dagger:dagger-compiler:$libDagger"
     implementation "com.google.dagger:dagger-android-support:$libDagger"

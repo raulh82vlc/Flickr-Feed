@@ -14,36 +14,16 @@
  * limitations under the License.
  */
 
-package com.raulh82vlc.flickrj.feed.data.datasource.cache;
+package com.raulh82vlc.flickrj.feed.domain.usecase_callback;
 
 import com.raulh82vlc.flickrj.feed.data.datasource.cache.model.FeedItemCacheModel;
 
-import java.util.List;
-
 /**
- * Cache data source contract
- *
- * @author Raul Hernandez Lopez
+ * Null interceptor to avoid problems at tests
+ * @author Raul Hernandez Lopez.
  */
-public interface CacheDataSource {
-
-    /**
-     * Gets a list of feed
-     **/
-    List<FeedItemCacheModel> getFeed();
-
-    /**
-     * Save feed
-     * @param itemCacheModels list of items from cache
-     */
-    void saveFeed(List<FeedItemCacheModel> itemCacheModels);
-
-    boolean isEmpty();
-
-    /**
-     * Gets a {@link FeedItemCacheModel} from the dictionary created once info is retrieved
-     * @param title title of the feed
-     * @param authorId author id
-     */
-    FeedItemCacheModel getItemFromFeed(String title, String authorId);
+public class NullInterceptor {
+    public String map(FeedItemCacheModel feedItem) {
+        return feedItem.getMedia().getUrl();
+    }
 }

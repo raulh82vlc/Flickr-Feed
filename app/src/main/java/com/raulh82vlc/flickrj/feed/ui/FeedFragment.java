@@ -151,8 +151,9 @@ public class FeedFragment extends BaseFragment implements FeedPresenter.View,
     @Override
     public void onItemFromListClick(FeedItemCacheModel feedItemCacheModel, View view) {
         /** go to the detail screen */
-        //TODO
-        // FeedDetailsActivity.navigateToDetailsActivity(activity, feedItemCacheModel.getTitle(),
-        //        view.findViewById(R.id.iv_image));
+        FeedDetailsActivity.navigateToDetailsActivity(activity,
+                feedItemCacheModel.getTitle(),
+                feedItemCacheModel.getAuthorId(),
+                view.findViewById(R.id.iv_image));
     }
 }

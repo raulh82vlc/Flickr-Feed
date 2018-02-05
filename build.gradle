@@ -36,6 +36,7 @@ allprojects {
         libDesignCompat = '27.0.2'
         libConstraintLayout = '1.0.2'
         libRecyclerView = '27.0.2'
+        libCardView = '27.0.2'
         libDagger = '2.11'
         libRetrofit = '2.3.0'
         libButterKnife = '8.8.1'

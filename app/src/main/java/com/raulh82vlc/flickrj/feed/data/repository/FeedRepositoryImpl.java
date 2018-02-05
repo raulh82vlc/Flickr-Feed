@@ -65,4 +65,9 @@ public class FeedRepositoryImpl implements FeedRepository {
                         }
                 );
     }
+
+    @Override
+    public FeedItemCacheModel getItemFromFeed(String title, String authorId) {
+        return cacheDataSource.getItemFromFeed(title, authorId);
+    }
 }

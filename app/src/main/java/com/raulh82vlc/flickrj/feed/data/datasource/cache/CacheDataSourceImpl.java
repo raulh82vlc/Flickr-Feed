@@ -19,7 +19,9 @@ package com.raulh82vlc.flickrj.feed.data.datasource.cache;
 import com.raulh82vlc.flickrj.feed.data.datasource.cache.model.FeedItemCacheModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -32,6 +34,7 @@ import javax.inject.Inject;
 public class CacheDataSourceImpl implements CacheDataSource {
 
     private List<FeedItemCacheModel> listOfItems = new ArrayList<>();
+    private Map<String, FeedItemCacheModel> dictionaryOfItems = new HashMap<>();
 
     @Inject
     public CacheDataSourceImpl() {
@@ -45,11 +48,19 @@ public class CacheDataSourceImpl implements CacheDataSource {
     @Override
     public void saveFeed(List<FeedItemCacheModel> itemCacheModels) {
         listOfItems.clear();
-        listOfItems.addAll(itemCacheModels);
+        for (FeedItemCacheModel item : itemCacheModels) {
+            listOfItems.add(item);
+            dictionaryOfItems.put(item.getTitle() + item.getAuthorId(), item);
+        }
     }
 
     @Override
     public boolean isEmpty() {
         return listOfItems.isEmpty();
+    }
+
+    @Override
+    public FeedItemCacheModel getItemFromFeed(String title, String authorId) {
+        return dictionaryOfItems.get(title + authorId);
     }
 }

@@ -33,4 +33,12 @@ public interface FeedRepository {
      * Gets a list of feed
      **/
     Single<List<FeedItemCacheModel>> getFeed();
+
+    /**
+     * Get an item based on its title and authorId
+     * @param title title
+     * @param authorId author identifier
+     * @return {@link FeedItemCacheModel}
+     */
+    FeedItemCacheModel getItemFromFeed(String title, String authorId);
 }

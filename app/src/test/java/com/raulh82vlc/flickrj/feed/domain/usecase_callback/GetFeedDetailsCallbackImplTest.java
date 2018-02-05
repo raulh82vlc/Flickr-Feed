@@ -17,72 +17,65 @@
 package com.raulh82vlc.flickrj.feed.domain.usecase_callback;
 
 import com.raulh82vlc.flickrj.feed.data.datasource.cache.model.FeedItemCacheModel;
-import com.raulh82vlc.flickrj.feed.presentation.FeedPresenter;
+import com.raulh82vlc.flickrj.feed.domain.mapper.TagsMapper;
+import com.raulh82vlc.flickrj.feed.presentation.FeedDetailsPresenter;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
-
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 /**
- * Get feed callback tests
+ * Get feed details callback tests
  * @author Raul Hernandez Lopez.
  */
-public class GetFeedCallbackImplTest {
+public class GetFeedDetailsCallbackImplTest {
 
     @Mock
-    private FeedPresenter.View view;
+    private FeedDetailsPresenter.View view;
     @Mock
-    private List<FeedItemCacheModel> items;
-    private GetFeedCallback underTestCallback;
+    private TagsMapper mapper;
+    @Mock
+    private NullInterceptor interceptor;
+
+    private GetFeedDetailsCallback underTestCallback;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        underTestCallback = new GetFeedCallbackImpl(view);
+        underTestCallback = new GetFeedDetailsCallbackImpl(view, mapper, interceptor);
     }
 
     @Test
-    public void onSuccess() throws Exception {
+    public void onItem() throws Exception {
+        when(mapper.map(anyList())).thenReturn("1 2");
+        when(interceptor.map(any(FeedItemCacheModel.class))).thenReturn("A");
 
-        underTestCallback.onSuccess(items);
+        underTestCallback.onItem(new FeedItemCacheModel());
 
-        verify(view).showLoader();
-        verify(view).hideError();
-        verify(view).hideLoader();
-        verify(view).showList();
-        verify(view).updateList(anyList());
-        verify(view).showAnimation();
+        verify(view).showAuthor(anyString());
+        verify(view).showDate(anyString());
+        verify(view).showDescription(anyString());
+        verify(view).showEffect();
+        verify(view).showImage(anyString());
+        verify(view).showTitle(anyString());
+        verify(view).showTags(anyString());
         verifyNoMoreInteractions(view);
     }
 
     @Test
     public void onError() throws Exception {
 
-        underTestCallback.onError("error");
-        verify(view).showLoader();
-        verify(view).hideLoader();
-        verify(view).hideList();
-        verify(view).showError(anyString());
+        underTestCallback.onError();
+
+        verify(view).closeView();
         verifyNoMoreInteractions(view);
     }
-
-    @Test
-    public void onInternetConnectionProblem() throws Exception {
-
-        underTestCallback.onInternetConnectionProblem("error");
-        verify(view).showLoader();
-        verify(view).hideLoader();
-        verify(view).hideList();
-        verify(view).showError(anyString());
-        verifyNoMoreInteractions(view);
-    }
-
 }
