@@ -1,19 +1,21 @@
 # Flickr Feed [![Build Status](https://travis-ci.org/raulh82vlc/FlickrFeed.svg?branch=master)](https://travis-ci.org/raulh82vlc/FlickrFeed)
 Shows latest Flickr feed images and metadata.
  This project uses *Clean architecture* by means of *Model-View-Presenter (MVP)* for the presentation layer with repository pattern and
- one network data source as well as `Dagger 2` for *Dependency Injection*, trying to respect *SOLID principles* as much as possible.
+ one network data source and another cache data source as well as `Dagger 2` for *Dependency Injection*, trying to respect *SOLID principles* as much as possible.
 
 ## Architecture design overview
 The exchange between the different *layers* is as follows:
 - **Data layer**: from the *Repository*, which is responsible of the *data logic* and communicating results to the *Interactor*
-- **Domain layer**: from an *Interactor*, which is responsible of the *business logic* and communicating results to the *Presenter*
+- **Domain layer**: from an *Use Case*, which is responsible of the *business logic* and communicating results to the *Presenter*
 - **Presentation layer**: from the *Presenter*, which orchestrates different interactors when required and also provides the final formatted info to a passive `View` from a UI element (fragments / activities).
 Finally, this information would be passed through the UI thread.
 - All these 3 layers are tested in-depth. Therefore there is no need for UI testing, all the logic is tested.
 
 ### Features
-- Shows Flickr public feed
-- Shows detail view and its main meta data
+- Shows the Flickr public feed as the latest 20 items uploaded by people
+- Shows detail view of every feed item and its main meta data
+- The code is lowly coupled and highly cohesive to enable SOLID principles
+- TDD approach has been followed, using SOLID as a proper strategy to test small units
 - Caches images (Picasso) & content on RAM memory (Cache data source)
 - Internet connection handling when no connection
 
@@ -25,7 +27,7 @@ New Task is: Search by tag:
 - the repository asks to the cache data source, where would be parsed once the API request was done
 - update at the saveFeed method of the cache data source would be required for it
 
-### Test results
+### Test results to open with a web browser
 [Test results](./Test_Results_java_in_app.html)
 ### SDK support
 Support SDKs from **19** to **27**
