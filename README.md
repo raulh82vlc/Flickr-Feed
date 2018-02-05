@@ -17,6 +17,14 @@ Finally, this information would be passed through the UI thread.
 - Caches images (Picasso) & content on RAM memory (Cache data source)
 - Internet connection handling when no connection
 
+### ToDo
+New Task is: Search by tag:
+- using a SearchView or EditText with a debounce time to enable look after no key is pressed at the main screen to filter by tag
+- the idea would be to index a list of items with the same tags under a dictionary or using a Trie instead if wanted to be predictable
+- once a word is typed, the presenter asks to the use case, to pass information from the repository
+- the repository asks to the cache data source, where would be parsed once the API request was done
+- update at the saveFeed method of the cache data source would be required for it
+
 ### Test results
 [Test results](./Test_Results_java_in_app.html)
 ### SDK support
